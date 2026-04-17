@@ -5,18 +5,20 @@ import {
   Select, MenuItem, FormControl, InputLabel
 } from '@mui/material';
 import DragHandleIcon from '@mui/icons-material/DragHandle';
-import { Reorder } from 'motion/react';
+import { Reorder, motion } from 'motion/react';
+import { Cursor } from "motion-plus/react"
+
 
 // sample data
 import birds from '../../data/bird_population.json';
 import fish from '../../data/fish.json';
 import planets from '../../data/planets.json';
 
-import { DatasetResponse, DatasetItem } from '@/types/data';
+import { Dataset, DatasetItem } from '@/types/data';
 
 export default function Home() {
   const [selectedIndex, setSelectedIndex] = useState(0);
-  const datasets: DatasetResponse[] = [birds, fish, planets]
+  const datasets: Dataset[] = [birds, fish, planets]
   const { title, description, items } = datasets[selectedIndex];
 
   const [shuffledItems, setShuffledItems] = useState<DatasetItem[]>([]);
@@ -38,6 +40,7 @@ export default function Home() {
           onChange={(e) => setSelectedIndex(Number(e.target.value))}
         >
           {datasets.map((ds, i) => (
+             
             <MenuItem key={i} value={i}>{ds.title}</MenuItem>
           ))}
         </Select>
@@ -60,7 +63,10 @@ export default function Home() {
             key={item.name}
             value={item}
             as="div"
-            style={{ position: 'relative' }}
+            style={{ position: 'relative', cursor: "grab"}}
+            onMouseDown={() => document.querySelectorAll('.sortable_list_container').forEach((el) => ((el as HTMLElement).style.cursor = 'grabbing'))}
+            onMouseUp={() => document.querySelectorAll('.sortable_list_container').forEach((el) => ((el as HTMLElement).style.cursor = 'grab'))}
+  
           >
             <Card variant="outlined">
               <CardContent sx={{ display: 'flex', alignItems: 'center', gap: 2, py: '12px !important' }}>
