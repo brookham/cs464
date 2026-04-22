@@ -2,7 +2,8 @@
 import { useState, useEffect } from 'react';
 import {
   Box, Typography, Card, CardContent,
-  Select, MenuItem, FormControl, InputLabel
+  Select, MenuItem, FormControl, InputLabel,
+  Button, Alert
 } from '@mui/material';
 import DragHandleIcon from '@mui/icons-material/DragHandle';
 import { Reorder } from 'motion/react';
@@ -21,11 +22,33 @@ export default function Home() {
 
   const [shuffledItems, setShuffledItems] = useState<DatasetItem[]>([]);
   const [isDragging, setIsDragging] = useState(false);
+  const [feedback, setFeedback] = useState<{
+    severity: 'success' | 'info',
+    message: string
+  } | null>(null);
 
   useEffect(() => {
     const shuffled = [...items].sort(() => Math.random() - 0.5);
     setShuffledItems(shuffled);
   }, [items]);
+
+  const handleCheckOrder = () => {
+    const correctCount = shuffledItems.reduce((count, item, index) => {
+      return item.order === items[index].order ? count + 1 : count;
+    }, 0);
+
+    if (correctCount === items.length) {
+      setFeedback({
+        severity: 'success',
+        message: 'Correct! You solved the puzzle.'
+      });
+    } else {
+      setFeedback({
+        severity: 'info',
+        message: `${correctCount} of ${items.length} items are in the correct position.`
+      });
+    }
+  };
 
   return (
     <Box sx={{ maxWidth: 600, mx: 'auto', mt: 4, px: 2 }}>
@@ -46,7 +69,8 @@ export default function Home() {
 
       {/* Title & description from the JSON */}
       <Typography variant="h4" gutterBottom>{title}</Typography>
-      <Typography variant="body1" color="text.secondary" sx={{ mb: 3 }}>        {description}
+      <Typography variant="body1" color="text.secondary" sx={{ mb: 3 }}>
+        {description}
       </Typography>
 
       {/* Item cards */}
@@ -74,6 +98,16 @@ export default function Home() {
           </Reorder.Item>
         ))}
       </Reorder.Group>
+
+      <Button variant="contained" onClick={handleCheckOrder} sx={{ mt: 3 }}>
+        Check Order
+      </Button>
+
+      {feedback && (
+        <Alert severity={feedback.severity} sx={{ mt: 2 }}>
+          {feedback.message}
+        </Alert>
+      )}
     </Box>
   );
 };
