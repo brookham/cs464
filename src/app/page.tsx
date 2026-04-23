@@ -22,6 +22,7 @@ export default function Home() {
   const { title, description, items } = datasets[selectedIndex];
 
   const [shuffledItems, setShuffledItems] = useState<DatasetItem[]>([]);
+  const [isDragging, setIsDragging] = useState(false);
 
   useEffect(() => {
     const shuffled = [...items].sort(() => Math.random() - 0.5);
@@ -63,14 +64,11 @@ export default function Home() {
             key={item.name}
             value={item}
             as="div"
-            style={{ position: 'relative', cursor: "grab"}}
-            onMouseDown={() => document.querySelectorAll('.sortable_list_container').forEach((el) => ((el as HTMLElement).style.cursor = 'grabbing'))}
-            onMouseUp={() => document.querySelectorAll('.sortable_list_container').forEach((el) => ((el as HTMLElement).style.cursor = 'grab'))}
-  
+            style={{ position: 'relative' }}
           >
-            <Card variant="outlined">
+            <Card variant="outlined" sx={{ cursor: isDragging ? 'grabbing' : 'grab' }}>
               <CardContent sx={{ display: 'flex', alignItems: 'center', gap: 2, py: '12px !important' }}>
-                <DragHandleIcon color="action" />
+                <DragHandleIcon color="action"/>
                 <Typography variant="body1">{item.name}</Typography>
               </CardContent>
             </Card>
