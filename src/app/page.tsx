@@ -10,6 +10,12 @@ import { Reorder } from 'motion/react';
 
 import { Dataset, DatasetItem, DatasetMeta } from '@/types/data';
 
+const CLOSE_THRESHOLD = 2;
+
+type status = 'correct' | 'close' | 'wrong' | 'unchecked';
+
+function getItemStatus()
+
 export default function Home() {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [dataset, setDataset] = useState<Dataset | null>(null)
