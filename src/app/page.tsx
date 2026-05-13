@@ -6,6 +6,7 @@ import DatasetPicker from '@/components/DatasetPicker';
 import FeedbackAlert from '@/components/FeedbackAlert';
 import DatasetHeader from '@/components/DatasetHeader';
 import DraggableDatasetItems from '@/components/DraggableDatasetItems';
+import ShuffleButton from '@/components/ShuffleButton';
 
 export default function Home() {
   const [selectedIndex, setSelectedIndex] = useState(0);
@@ -72,6 +73,14 @@ export default function Home() {
     setFeedback(null);
   };
 
+  const handleReshuffle = () => {
+    if (dataset) {
+      const shuffled = [...dataset.items].sort(() => Math.random() - 0.5);
+      setShuffledItems(shuffled);
+      setFeedback(null);
+    }
+  };
+
   return (
     <Box sx={{ maxWidth: 600, mx: 'auto', mt: 4, px: 2 }}>
       <DatasetPicker
@@ -80,9 +89,12 @@ export default function Home() {
         onSelect={setSelectedIndex}
       />
 
-      <Button variant="contained" onClick={handleCheckOrder} sx={{ mb: 2 }}>
-        Check Order
-      </Button>
+      <Box sx={{ display: 'flex', gap: 1, mb: 2 }}>
+        <Button variant="contained" onClick={handleCheckOrder}>
+          Check Order
+        </Button>
+        <ShuffleButton onClick={handleReshuffle} disabled={!dataset} />
+      </Box>
 
       <FeedbackAlert feedback={feedback} />
       <DatasetHeader dataset={dataset} />
