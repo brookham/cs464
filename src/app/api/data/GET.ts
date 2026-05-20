@@ -36,6 +36,7 @@ export async function GET(request: Request) {
 
             const dataFile: Dataset = {
                 id: dataset.id,
+                dataset_slug: dataset.dataset_slug ?? undefined,
                 title: dataset.title,
                 description: dataset.description || '',
                 items: (items || []).map(item => ({
@@ -77,6 +78,7 @@ export async function GET(request: Request) {
 
             allData[dataset.dataset_slug ?? ""] = {
                 id: dataset.id,
+                dataset_slug: dataset.dataset_slug ?? undefined,
                 title: dataset.title,
                 description: dataset.description || '',
                 items: (items || []).map(item => ({

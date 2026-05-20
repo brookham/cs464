@@ -81,6 +81,11 @@ export default function PuzzleGame({ dataset }: PuzzleGameProps) {
         <Button variant="contained" component={Link} href="/add">
           Add New Dataset
         </Button>
+        {dataset?.dataset_slug ? (
+          <Button variant="outlined" component={Link} href={`/update/${dataset.dataset_slug}`}>
+            Edit Dataset
+          </Button>
+        ) : null}
       </Box>
 
       <FeedbackAlert feedback={feedback} />
